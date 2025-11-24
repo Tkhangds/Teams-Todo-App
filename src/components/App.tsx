@@ -7,25 +7,42 @@ import {
   Spinner,
   tokens,
 } from "@fluentui/react-components";
-import { HashRouter as Router, Navigate, Route, Routes } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { useTeamsUserCredential } from "@microsoft/teamsfx-react";
-import Privacy from "./Privacy";
-import TermsOfUse from "./TermsOfUse";
 import Tab from "./Tab";
 import { TeamsFxContext } from "./Context";
 import config from "./sample/lib/config";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 /**
  * The main app which handles the initialization and routing
  * of the app.
  */
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: 5 * 60 * 1000,
+      retry: false,
+    },
+  },
+});
+
 export default function App() {
-  const { loading, theme, themeString, teamsUserCredential } = useTeamsUserCredential({
-    initiateLoginEndpoint: config.initiateLoginEndpoint!,
-    clientId: config.clientId!,
-  });
+  const { loading, theme, themeString, teamsUserCredential } =
+    useTeamsUserCredential({
+      initiateLoginEndpoint: config.initiateLoginEndpoint!,
+      clientId: config.clientId!,
+    });
   return (
-    <TeamsFxContext.Provider value={{ theme, themeString, teamsUserCredential }}>
+    <TeamsFxContext.Provider
+      value={{ theme, themeString, teamsUserCredential }}
+    >
       <FluentProvider
         theme={
           themeString === "dark"
@@ -39,18 +56,18 @@ export default function App() {
         }
         style={{ background: tokens.colorNeutralBackground3 }}
       >
-        <Router>
-          {loading ? (
-            <Spinner style={{ margin: 100 }} />
-          ) : (
-            <Routes>
-              <Route path="/privacy" element={<Privacy />} />
-              <Route path="/termsofuse" element={<TermsOfUse />} />
-              <Route path="/tab" element={<Tab />} />
-              <Route path="*" element={<Navigate to={"/tab"} />}></Route>
-            </Routes>
-          )}
-        </Router>
+        <QueryClientProvider client={queryClient}>
+          <Router>
+            {loading ? (
+              <Spinner style={{ margin: 100 }} />
+            ) : (
+              <Routes>
+                <Route path="/tab" element={<Tab />} />
+                <Route path="*" element={<Navigate to={"/tab"} />}></Route>
+              </Routes>
+            )}
+          </Router>
+        </QueryClientProvider>
       </FluentProvider>
     </TeamsFxContext.Provider>
   );

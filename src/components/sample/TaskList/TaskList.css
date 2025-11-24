@@ -1,0 +1,47 @@
+.pageContainer {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.pageContainer > button {
+  margin-bottom: 1.5rem;
+}
+
+.create-task-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.create-task-container > input {
+  flex: 1;
+}
+
+.filter-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.taskList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+}
+
+.light {
+  background-color: var(--colorNeutralBackground1);
+}
+
+.dark {
+  background-color: var(--colorNeutralBackground1);
+}
+
+.contrast {
+  background-color: var(--colorNeutralBackground1);
+}
